@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+		<link rel="stylesheet" href="/assets/css/style.css" type="text/css" />
+		<title>MVC With Cats!</title>
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="/assets/js/cats.js"></script>
+	</head>
+	<body>
+		{{{ body }}}
+        <script type="text/javascript">
+            	var currentURL = window.location.origin;
+		$("#submitBtn").click(function (event) {
+			event.preventDefault();
+			var name = $("#newBurg").val().trim();
+			var burgName = {
+				name: name
+			}
+			$.post(currentURL + "/api/burgers", burgName)
+				.then(function (response) {
+					console.log(response);
+					location.reload();
+				});
+		});
+		$(".change-condition").click(function () {
+			var id = $(this).data('id');
+			$.ajax("/api/burgers/" + id,  {
+				type: "PUT",
+			}).then(function (response) {
+					console.log(response);
+					location.reload();
+				});
+		});
+        
+        </script>
+	</body>
+</html>

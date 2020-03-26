@@ -1,0 +1,48 @@
+<h1>Burgers!</h1>
+
+<h2>Burgers to Eat!</h2>
+
+<div class="card-body">
+    <div class="row" class="burgers">
+        <div id="left" class="col lists">
+            <ul>
+                {{#each burgers}}
+                    {{#unless devoured}}
+                    {{> burgers/burger-block devoured=true}}
+                    {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+    </div>  
+</div>
+
+
+<h2>Devoured Burgers!</h2>
+
+<div class="card-body">
+    <div class="row" class="burgers">
+        <div id="right" class="col lists">
+            <ul>
+                {{#each burgers}}
+                    {{#unless devoured}}
+                    {{> burgers/burger-block devoured=true}}
+                    {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+    </div>  
+</div>
+
+ <h2>Add a Burger</h2>
+    <form class="create-form" class="row">
+
+      <div class="form-group">
+        <input type="text" id="newBurg" placeholder="Enter your burger">
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn btn-primary btn-sm">Add Burger</button>
+    </form>
+  </div>
+</div>
+
+
