@@ -1,5 +1,30 @@
 var connection = require("../config/connection.js");
 
+function printQuestionMarks(num) {
+  var arr = [];
+
+  for (var i = 0; i < num; i++) {
+    arr.push("?");
+  }
+
+  return arr.toString();
+}
+
+
+function objToSql(ob) {
+  var arr = [];
+  for (var key in ob) {
+    var value = ob[key];
+    if (Object.hasOwnProperty.call(ob, key)) {
+      if (typeof value === "string" && value.indexOf(" ") >= 0) {
+        value = "'" + value + "'";
+      }
+      arr.push(key + "=" + value);
+    }
+  }
+  return arr.toString();
+}
+
 var orm = {
   selectAll: function(tableInput, cb) {
     // selectAll: function(tableInput, cb) {
@@ -9,21 +34,36 @@ var orm = {
           cb(result);
       });
   },
-  insertOne: function(valOfCol) {
-    var queryString = "INSERT INTO burgers (burger_name) VALUES ?";
-    connection.query(queryString, valOfCol, function(err, result) {
-      if (err) throw err;
-      console.log(result);
-    });
+  insertOne: function(table, cols, vals, cb) {
+    var queryString = "INSERT INTO " + table + " (" + cols.toString() + ") VALUES (" + printQuestionMarks(vals.length) + ") ";
+    console.log(queryString);
+    connection.query(queryString, vals, function(err, result) {
+        if (err) throw err;
+        cb(result);
+    })
   },
-  updateOne: function(id) {
-    var queryString = "UPDATE burgers SET devoured = 1 WHERE id = ?";
+  updateOne: function(table, objColVals, condition, cb) {
+    var queryString = "UPDATE " + table + " SET " + objToSql(objColVals) + " WHERE " + condition;
+    console.log(queryString);
+    connection.query(queryString, function(err, result) {
+        if (err) throw err;
+        cb(result);
+    })
+},
+  delete: function(table, condition, cb) {
+    var queryString = "DELETE FROM " + table;
+    queryString += " WHERE ";
+    queryString += condition;
 
-    connection.query(queryString, id, function(err, result) {
-      if (err) throw err;
-      console.log(result);
+    connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+
+      cb(result);
     });
   }
 };
+// };
 
 module.exports = orm;
